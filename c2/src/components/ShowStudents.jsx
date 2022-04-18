@@ -2,31 +2,19 @@
 import { useState,useEffect } from "react";
 import "../App.css"
 export const ShowStudents = () => {
-    const [data,setData] = useState([]);
-    useEffect(()=>{
-        getData()
-    },[]);
-
-    const getData = ()=>{
-        fetch("http://localhost:8080/students")
-        .then((res)=>(res.json())).then((data)=>{
-           
-            setData
-        })
-      
-    
-}
-const handleSort = (val,ascending= true)=>{
-const sorting = data.sort((a,b)=>{
-    if(ascending){
-        return a-b;
-    }
-    else {
-        return b-a;
-    }
-})
-setData([...sorting])
-}
+    const [students, setStudents] = useState([]);
+  
+    useEffect(() => {
+      getData();
+    }, []);
+  
+    const getData = async () => {
+      let data = await fetch("http://localhost:8080/students").then((d) =>
+        d.json()
+      );
+      // console.log(data);
+      setStudents(data);
+    };
     return (
       <div>
         <div className="controls">
@@ -53,7 +41,7 @@ setData([...sorting])
               <option value="desc">Descending</option>
             </select>
           </div>
-          <button className="sort" onClick={()=>handleSort()}>sort</button>
+          <button className="sort" >sort</button>
         </div>
         <table className="table">
           <thead>
@@ -69,17 +57,18 @@ setData([...sorting])
             </tr>
           </thead>
           <tbody className="tbody">
-            {/* populate all rows like below: */}
-            <tr className="row">
-              <td className="first_name">{student.first_name}</td>
-              <td className="last_name">{student.last_name}</td>
-              <td className="email">{student.email}</td>
-              <td className="gender">{student.gender}</td>
-              <td className="age">{student.age}</td>
-              <td className="tenth_score">{student.tenth_score}</td>
-              <td className="twelth_score">{student.twelth_score}</td>
-              <td className="preferred_branch">{student.preferred_branch}</td>
+            {students.map((elem) => (
+            <tr className='row'>
+              <td className='first_name'>{elem.first_name}</td>
+              <td className='last_name'>{elem.last_name}</td>
+              <td className='email'>{elem.email}</td>
+              <td className='gender'>{elem.gender}</td>
+              <td className='age'>{elem.age}</td>
+              <td className='tenth_score'>{elem.tenth_score}</td>
+              <td className='twelth_score'>{elem.twelth_score}</td>
+              <td className='preferred_branch'>{elem.preferred_branch}</td>
             </tr>
+            ))}
           </tbody>
         </table>
       </div>
